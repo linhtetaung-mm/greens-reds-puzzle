@@ -42,8 +42,8 @@ Follow these quick commands to spin up the code sandbox on your local developer 
 
 ### 1. Clone the Codebase
 ```bash
-git clone https://github.com
-cd YOUR_REPO_NAME
+git clone https://github.com/linhtetaung-mm/greens-reds-puzzle.git
+cd greens-reds-puzzle
 ```
 
 ### 2. Install Project Modules
