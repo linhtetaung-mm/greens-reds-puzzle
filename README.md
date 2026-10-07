@@ -72,5 +72,40 @@ The asset builder will write static production files directly into a self-contai
 
 ---
 
+## Checks and Vercel deployment
+
+Run all checks before deploying:
+
+```bash
+pnpm check
+```
+
+This runs lint, automated puzzle tests, and the production build. You can also
+run `pnpm lint`, `pnpm test`, and `pnpm build` separately. The tests cover every
+one of the 512 possible boards, square toggling, and canceled scrambles.
+Use Node.js 24.x for these commands and your Vercel build.
+
+In Vercel, import the connected GitHub repository
+`linhtetaung-mm/greens-reds-puzzle` with these settings:
+
+| Setting | Value |
+| --- | --- |
+| Framework Preset | Vite |
+| Root Directory | Repository root (leave the default) |
+| Install Command | `pnpm install --frozen-lockfile` |
+| Build Command | `pnpm check` |
+| Output Directory | `dist` |
+| Node.js Version | 24.x |
+
+The local checkout folder is named `greenslights`, but `package.json` is already
+at the Git repository root. Do not set Vercel's Root Directory to `greenslights`.
+No environment variables are required by this app. Commit and push your changes
+before deploying from GitHub so Vercel uses the updated checks and fixes.
+
+References: [Vite on Vercel](https://vercel.com/docs/frameworks/frontend/vite)
+and [build configuration](https://vercel.com/docs/builds/configure-a-build).
+
+---
+
 ## 📄 License
 This application setup is completely open-source and free to share, modify, or adapt for your own game mechanics. Enjoy codebreaking!

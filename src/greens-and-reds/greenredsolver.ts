@@ -17,7 +17,7 @@ export function getSolution(currentBoard: number[]) {
   // Target: we want to flip all 0s (Red) to 1s (Green)
   const b = currentBoard.map(val => val === 0 ? 1 : 0);
 
-  let matrix = ADJACENCY_MATRIX.map((row, i) => [...row, b[i]]);
+  const matrix = ADJACENCY_MATRIX.map((row, i) => [...row, b[i]]);
   
   for (let pivot = 0; pivot < 9; pivot++) {
     let sel = pivot;

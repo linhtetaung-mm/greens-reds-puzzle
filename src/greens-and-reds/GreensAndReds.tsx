@@ -1,6 +1,5 @@
-"use client";
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { calculateNewBoard, createScrambledBoard } from './board';
 import { getSolution } from './greenredsolver';
 import ReactMarkdown from 'react-markdown';
 import techMarkdown from "./greenandredsolution.md?raw";
@@ -9,33 +8,10 @@ import exampleMarkdown from "./example.md?raw";
 export default function GreensAndReds() {
 
 
-  // 1. Initialize with a "safe" empty state (all Green/1)
-  const [board, setBoard] = useState<number[]>(Array(9).fill(1));
+  const [board, setBoard] = useState<number[]>(createScrambledBoard);
   const [moves, setMoves] = useState(0);
-  const [isClient, setIsClient] = useState(false); // New state to track mounting
-
   const [hints, setHints] = useState<number[]>(Array(9).fill(0));
-
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
-  // 2. This only runs once the component is safely in the browser
-  useEffect(() => {
-    setIsClient(true);
-    resetGame(); // Scramble the board once mounted
-  }, []);
-
-  function calculateNewBoard(pos: number, currentBoard: number[]): number[] {
-    const newBoard = [...currentBoard];
-    const r = Math.floor(pos / 3);
-    const c = pos % 3;
-
-    newBoard[pos] ^= 1;
-    if (r < 2) newBoard[(r + 1) * 3 + c] ^= 1;
-    if (r > 0) newBoard[(r - 1) * 3 + c] ^= 1;
-    if (c < 2) newBoard[r * 3 + (c + 1)] ^= 1;
-    if (c > 0) newBoard[r * 3 + (c - 1)] ^= 1;
-
-    return newBoard;
-  }
 
   const handleShowSolution = () => {
     const sol = getSolution(board);
@@ -53,22 +29,12 @@ export default function GreensAndReds() {
   };
 
   const resetGame = () => {
-    let tempBoard = Array(9).fill(1);
-    for (let i = 0; i < 20; i++) {
-      const randomPos = Math.floor(Math.random() * 9);
-      tempBoard = calculateNewBoard(randomPos, tempBoard);
-    }
-    setBoard(tempBoard);
+    setBoard(createScrambledBoard());
     setMoves(0);
     setHints(Array(9).fill(0));
   };
 
   const isWinner = board.every((cell) => cell === 1);
-
-  // 3. Don't render the game board until we are on the client
-  if (!isClient) {
-    return <div className="h-[400px] flex items-center justify-center">Loading Puzzle...</div>;
-  }
 
   return (
     <div className="flex flex-col items-center justify-center space-y-6 p-8">
